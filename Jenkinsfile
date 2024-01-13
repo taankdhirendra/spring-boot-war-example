@@ -6,16 +6,14 @@ pipeline{
     stages{
         stage("Test"){
             steps{
-                slackSend channel: 'project', message: 'Test Job Started'
                 sh 'mvn test'
-                
+                slackSend channel: 'project', message: 'Test Job Completed'
             }
         }
         stage("Build"){
             steps{
-                slackSend channel: 'project', message: 'Build Job Started'
                 sh 'mvn package'
-                
+                slackSend channel: 'project', message: 'Build Job Completed'
             }
         }
         stage("Deploy on test"){
