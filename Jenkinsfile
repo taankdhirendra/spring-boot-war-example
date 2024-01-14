@@ -18,7 +18,7 @@ pipeline{
         }
         stage("Deploy on test"){
             steps{
-                deploy adapters: [tomcat9(credentialsId: 'tomcat-1', path: '', url: 'http://54.159.198.144:8080')], contextPath: '/app', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://54.159.198.144:8080')], contextPath: '/app', war: '**/*.war'
                 slackSend channel: 'project', message: 'aap deploy on test server'
             }
         }
