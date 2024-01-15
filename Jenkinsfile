@@ -4,6 +4,12 @@ pipeline{
         maven 'Maven' 
     }
     stages{
+        stage("Clone"){
+            steps{
+                sh 'git clone https://github.com/taankdhirendra/spring-boot-war-example.git'
+                slackSend channel: 'project', message: 'Code Clone Job Completed'
+            }
+        }
         stage("Test"){
             steps{
                 sh 'mvn test'
