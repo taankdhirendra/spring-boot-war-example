@@ -4,12 +4,6 @@ pipeline{
         maven 'Maven' 
     }
     stages{
-        stage("Clone"){
-            steps{
-                sh 'git clone https://github.com/taankdhirendra/spring-boot-war-example.git'
-                slackSend channel: 'project', message: 'Code Clone Job Completed'
-            }
-        }
         stage("Test"){
             steps{
                 sh 'mvn test'
@@ -24,7 +18,7 @@ pipeline{
         }
         stage("Deploy on test"){
             steps{
-                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://35.171.24.201:8084')], contextPath: '/app', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://44.205.245.223:8084')], contextPath: '/app', war: '**/*.war'
                 slackSend channel: 'project', message: 'aap deploy on test server'
             }
         }
