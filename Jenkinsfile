@@ -1,42 +1,27 @@
-pipeline{
-    agent any
+pipeline {
+    agent { label 'dev' }
     tools {
         maven 'Maven' 
     }
-    stages{
-        stage("Test"){
-            steps{
-                sh 'mvn test'
-                slackSend channel: 'project', message: 'Test Completed'
+
+    stages {
+        stage('Code Clone') {
+            steps {
+                git url: 'https://github.com/taankdhirendra/spring-boot-war-example.git', branch: 'master'
+                slackSend channel: 'project', message: 'Code Clone Done'
             }
         }
-        stage("Build"){
-            steps{
-                sh 'mvn package'
-                slackSend channel: 'project', message: 'Build Completed'
+        stage('Test and Build') {
+            steps {
+                sh 'mvn test && mvn package'
+                slackSend channel: 'project', message: 'Test and build Done'
             }
         }
-        stage("Deploy on test"){
-            steps{
-                deploy adapters: [tomcat9(credentialsId: 'test', path: '', url: 'http://3.88.159.236:8080 ')], contextPath: '/app', war: '**/*.war'
-                slackSend channel: 'project', message: 'aap deploy on test server'
+        stage('Deploy') {
+            steps {
+                deploy adapters: [tomcat9(credentialsId: 'test', path: '', url: 'http://54.221.91.244:8080')], contextPath: '/app', war: '**/*.war'
+                slackSend channel: 'project', message: 'Deploy on test server'
             }
-        }
-        stage("Deploy on prod"){
-            steps{
-                echo "========executing A========"
-            }
-        }
-    }
-    post{
-        always{
-            echo "========always========"
-        }
-        success{
-            echo "========pipeline executed successfully ========"
-        }
-        failure{
-            echo "========pipeline execution failed========"
         }
     }
 }
